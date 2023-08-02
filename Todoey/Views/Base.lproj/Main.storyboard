@@ -53,7 +53,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="J9h-wG-D11" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1601" y="-29"/>
+            <point key="canvasLocation" x="-2009" y="-29"/>
         </scene>
         <!--ToDoey-->
         <scene sceneID="o3I-pf-A5p">
@@ -92,7 +92,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V80-5V-knp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2626" y="-29"/>
+            <point key="canvasLocation" x="-2746" y="-29"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="aHz-Gt-ALg">
@@ -118,6 +118,7 @@
             <point key="canvasLocation" x="-3558" y="-29"/>
         </scene>
     </scenes>
+    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
     <resources>
         <systemColor name="linkColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

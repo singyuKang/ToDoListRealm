@@ -8,12 +8,13 @@
 
 import UIKit
 import CoreData
+import RealmSwift
 
 class CatagoryViewController: UITableViewController {
     
+    let realm = try! Realm()
     
-    
-    var categories = [Catagory]()
+    var categories = [Category]()
     
     
     //CoreData context
@@ -30,7 +31,7 @@ class CatagoryViewController: UITableViewController {
         navigationItem.standardAppearance = appearance
         navigationItem.scrollEdgeAppearance = appearance
         
-        loadCategories()
+//        loadCategories()
 
     }
     @IBAction func addButtonPress(_ sender: UIBarButtonItem) {
@@ -39,11 +40,11 @@ class CatagoryViewController: UITableViewController {
         let action = UIAlertAction(title: "Add Catagory", style: .default) { (action) in
             // what will happen once the user clicks the Add Item button on our alert
 
-            let newCatagory = Catagory(context: self.context)
+            let newCatagory = Category()
             newCatagory.name = textField.text!
             self.categories.append(newCatagory)
 
-            self.saveCategories()
+            self.save(category: newCatagory)
 
             DispatchQueue.main.async {
                 self.tableView.reloadData()
@@ -62,24 +63,26 @@ class CatagoryViewController: UITableViewController {
     }
     
     //MARK - Save Data Load Data
-    func saveCategories() {
+    func save(category : Category) {
         do {
-            try context.save()
+            try realm.write{
+                realm.add(category)
+            }
         }catch{
             print("Error Encoding Catagory Array")
         }
   
     }
     
-    func loadCategories(with request : NSFetchRequest<Catagory> = Catagory.fetchRequest()) {
-        do {
-            categories = try context.fetch(request)
-            print("Load Items::::::::::::::::",try context.fetch(request))
-            tableView.reloadData()
-        }catch {
-            print("Error Load Catagory \(error)")
-        }
-    }
+//    func loadCategories(with request : NSFetchRequest<Category> = Category.fetchRequest()) {
+//        do {
+//            categories = try context.fetch(request)
+//            print("Load Items::::::::::::::::",try context.fetch(request))
+//            tableView.reloadData()
+//        }catch {
+//            print("Error Load Catagory \(error)")
+//        }
+//    }
     
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -103,7 +106,7 @@ class CatagoryViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        goToItems
         performSegue(withIdentifier: "goToItems", sender: self)
-
+        
         
     }
     
