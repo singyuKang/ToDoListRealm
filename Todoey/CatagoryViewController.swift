@@ -7,32 +7,23 @@
 //
 
 import UIKit
-import CoreData
+import SwipeCellKit
 import RealmSwift
 
 class CatagoryViewController: UITableViewController {
+
     
     let realm = try! Realm()
     
-    var categories = [Category]()
+    var categories : Results<Category>?
     
-    
-    //CoreData context
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationSetting()
+        loadCategories()
         
-        //navigation Bar Setting
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithTransparentBackground()
-        appearance.backgroundColor = UIColor.systemBlue
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationItem.standardAppearance = appearance
-        navigationItem.scrollEdgeAppearance = appearance
+        tableView.rowHeight = 80.0
         
-//        loadCategories()
-
     }
     @IBAction func addButtonPress(_ sender: UIBarButtonItem) {
         var textField : UITextField = UITextField()
@@ -42,12 +33,11 @@ class CatagoryViewController: UITableViewController {
 
             let newCatagory = Category()
             newCatagory.name = textField.text!
-            self.categories.append(newCatagory)
-
+            
             self.save(category: newCatagory)
 
             DispatchQueue.main.async {
-                self.tableView.reloadData()
+                self.loadCategories()
                 
             }
         }
@@ -69,55 +59,113 @@ class CatagoryViewController: UITableViewController {
                 realm.add(category)
             }
         }catch{
-            print("Error Encoding Catagory Array")
+            print("Error Save Category")
         }
   
     }
     
-//    func loadCategories(with request : NSFetchRequest<Category> = Category.fetchRequest()) {
-//        do {
-//            categories = try context.fetch(request)
-//            print("Load Items::::::::::::::::",try context.fetch(request))
-//            tableView.reloadData()
-//        }catch {
-//            print("Error Load Catagory \(error)")
-//        }
-//    }
+    func loadCategories() {
+        categories = realm.objects(Category.self)
+        tableView.reloadData()
+    }
+    
+    func navigationSetting(){
+        //navigation Bar Setting
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundColor = UIColor.systemBlue
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationItem.standardAppearance = appearance
+        navigationItem.scrollEdgeAppearance = appearance
+        
+    }
+ 
+    
+    
     
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return categories.count
+        //Nil Coalescing Operator
+        //Not nil return categories count
+        //if nil return 1
+        return categories?.count ?? 1
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Fetch a cell of the appropriate type.
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CatagoryCell", for: indexPath)
-
-        let category = categories[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CatagoryCell", for: indexPath) as! SwipeTableViewCell
         // Configure the cell’s contents.
-        cell.textLabel!.text = category.name
 
+        cell.textLabel!.text = categories?[indexPath.row].name ?? "No Categories Add yet"
+        
+        cell.delegate = self
+        
         return cell
     }
     
+//    //MARK - Swipe Library
+//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! SwipeTableViewCell
+//        cell.delegate = self
+//        return cell
+//    }
+//
+    
+
     
     // MARK - TableView Delegate Methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        goToItems
         performSegue(withIdentifier: "goToItems", sender: self)
-        
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! ToDoListViewController
         
         if let indexPath = tableView.indexPathForSelectedRow {
-            destinationVC.selectedCategory = categories[indexPath.row]
-             
+            destinationVC.selectedCategory = categories?[indexPath.row]
+            
         }
         
     }
 
 }
+
+
+//MARK - Swipe Cell Delegate Methods
+extension CatagoryViewController : SwipeTableViewCellDelegate {
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        
+        
+        guard orientation == .right else { return nil }
+
+        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+            // handle action by updating model with deletion
+            
+            if let category = self.categories?[indexPath.row]{
+                do{
+                    try self.realm.write{
+                        self.realm.delete(category)
+//                        tableView.deleteRows(at: [indexPath], with: .fade)
+                    }
+                }catch{
+                    print("Error Delete Category, \(error)")
+                }
+            }
+        }
+
+        // customize the action appearance
+        deleteAction.image = UIImage(named: "delete")
+
+        return [deleteAction]
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
+        var options = SwipeOptions()
+        options.expansionStyle = .destructive
+        options.transitionStyle = .border
+        return options
+    }
+    
+    
+}
+
