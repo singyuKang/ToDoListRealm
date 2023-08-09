@@ -9,6 +9,7 @@
 import UIKit
 import RealmSwift
 import ChameleonFramework
+import SwiftUI
 
 class CatagoryViewController: SwipteTableViewController {
 
@@ -19,13 +20,24 @@ class CatagoryViewController: SwipteTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationSetting()
+       
         loadCategories()
         
-        tableView.rowHeight = 80.0
+//        tableView.rowHeight = 80.0
         tableView.separatorStyle = .none
+        tableView.rowHeight = 80
+        tableView.register(UINib(nibName: "CategoryCell", bundle: nil), forCellReuseIdentifier: "CategoryCell")
         
     }
+    override func viewWillAppear(_ animated: Bool) {
+        guard let navBar = navigationController?.navigationBar else {fatalError("Navigation Controller does not exist.")}
+        navigationSetting()
+        navBar.titleTextAttributes = [.foregroundColor : UIColor.white]
+    }
+ 
+    
+    
+    
     @IBAction func addButtonPress(_ sender: UIBarButtonItem) {
         var textField : UITextField = UITextField()
         let alert = UIAlertController(title: "Add New Todo Catagory", message: "", preferredStyle: .alert)
@@ -88,13 +100,40 @@ class CatagoryViewController: SwipteTableViewController {
     func navigationSetting(){
         //navigation Bar Setting
         let appearance = UINavigationBarAppearance()
-        appearance.configureWithTransparentBackground()
-        appearance.backgroundColor = UIColor.systemBlue
+        appearance.backgroundColor = UIColor(hexString: "#D980FA")
         appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationItem.standardAppearance = appearance
-        navigationItem.scrollEdgeAppearance = appearance
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
         
     }
+    
+    //MARK - tableView Delete
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+
+    // Override to support editing the table view.
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            if let category = categories?[indexPath.row]{
+                do{
+                    try realm.write{
+                        realm.delete(category)
+                        tableView.deleteRows(at: [indexPath], with: .fade)
+                    }
+                }catch{
+                    print("Error Delete category, \(error)")
+                }
+            }
+
+        } else if editingStyle == .insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        }
+    }
+
  
     
     
@@ -110,23 +149,19 @@ class CatagoryViewController: SwipteTableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+//        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath) as! CategoryCell
         
-        
-        
-        cell.textLabel?.text = categories?[indexPath.row].name ?? "No categories Added  Yet"
-        cell.backgroundColor = UIColor(hexString: categories?[indexPath.row].backgroundColorHexValue ?? "0xFFFFFF")
+        if let category = categories?[indexPath.row] {
+            
+//            guard let categoryColour = UIColor(hexString: category.backgroundColorHexValue) else {fatalError("category backgroundColorHexValue  cell Color Setting Error")}
+            cell.categoryLabel?.text = category.name
+            cell.categoryLabel?.textColor = UIColor(hexString: "#778ca3")
+            cell.selectionStyle = .none
+        }
         
         return cell
     }
-    
-//    //MARK - Swipe Library
-//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! SwipeTableViewCell
-//        cell.delegate = self
-//        return cell
-//    }
-//
     
 
     
@@ -140,11 +175,9 @@ class CatagoryViewController: SwipteTableViewController {
         
         if let indexPath = tableView.indexPathForSelectedRow {
             destinationVC.selectedCategory = categories?[indexPath.row]
-            
         }
         
     }
 
 }
-
 

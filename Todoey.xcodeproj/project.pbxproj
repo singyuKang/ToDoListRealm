@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		8D877C49AFD1E992C56BC75C /* Pods_Todoey.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52C59DB6A01639487E2D0453 /* Pods_Todoey.framework */; };
 		E9093CBA2A7B2CDA008583DD /* SwipteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9093CB92A7B2CDA008583DD /* SwipteTableViewController.swift */; };
+		E94C6F052A830D9B005E4018 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94C6F032A830D9B005E4018 /* CategoryCell.swift */; };
+		E94C6F062A830D9B005E4018 /* CategoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E94C6F042A830D9B005E4018 /* CategoryCell.xib */; };
+		E94C6F092A833162005E4018 /* ItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94C6F072A833162005E4018 /* ItemCell.swift */; };
+		E94C6F0A2A833162005E4018 /* ItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E94C6F082A833162005E4018 /* ItemCell.xib */; };
 		E9DA7EB02A78F5B20099197E /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DA7EAF2A78F5B20099197E /* Item.swift */; };
 		E9DA7EB22A78F5BF0099197E /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DA7EB12A78F5BF0099197E /* Category.swift */; };
 		E9F2778A2A778EC900C74754 /* CatagoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F277892A778EC900C74754 /* CatagoryViewController.swift */; };
@@ -24,6 +28,10 @@
 		7EA67AA72E8FF161984FA9AF /* Pods-Todoey.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todoey.debug.xcconfig"; path = "Target Support Files/Pods-Todoey/Pods-Todoey.debug.xcconfig"; sourceTree = "<group>"; };
 		B8CDB813776E064CFB072AF1 /* Pods-Todoey.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todoey.release.xcconfig"; path = "Target Support Files/Pods-Todoey/Pods-Todoey.release.xcconfig"; sourceTree = "<group>"; };
 		E9093CB92A7B2CDA008583DD /* SwipteTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipteTableViewController.swift; sourceTree = "<group>"; };
+		E94C6F032A830D9B005E4018 /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
+		E94C6F042A830D9B005E4018 /* CategoryCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CategoryCell.xib; sourceTree = "<group>"; };
+		E94C6F072A833162005E4018 /* ItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCell.swift; sourceTree = "<group>"; };
+		E94C6F082A833162005E4018 /* ItemCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ItemCell.xib; sourceTree = "<group>"; };
 		E9DA7EAF2A78F5B20099197E /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		E9DA7EB12A78F5BF0099197E /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		E9F277892A778EC900C74754 /* CatagoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatagoryViewController.swift; sourceTree = "<group>"; };
@@ -88,6 +96,10 @@
 			isa = PBXGroup;
 			children = (
 				EB2BE4FF239524DB00FB933B /* Main.storyboard */,
+				E94C6F032A830D9B005E4018 /* CategoryCell.swift */,
+				E94C6F042A830D9B005E4018 /* CategoryCell.xib */,
+				E94C6F072A833162005E4018 /* ItemCell.swift */,
+				E94C6F082A833162005E4018 /* ItemCell.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -194,7 +206,9 @@
 			files = (
 				EB2BE506239524DC00FB933B /* LaunchScreen.storyboard in Resources */,
 				EB2BE503239524DC00FB933B /* Assets.xcassets in Resources */,
+				E94C6F0A2A833162005E4018 /* ItemCell.xib in Resources */,
 				EB2BE501239524DB00FB933B /* Main.storyboard in Resources */,
+				E94C6F062A830D9B005E4018 /* CategoryCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,9 +261,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E94C6F092A833162005E4018 /* ItemCell.swift in Sources */,
 				E9DA7EB02A78F5B20099197E /* Item.swift in Sources */,
 				E9F2778A2A778EC900C74754 /* CatagoryViewController.swift in Sources */,
 				EB2BE4FE239524DB00FB933B /* ToDoListViewController.swift in Sources */,
+				E94C6F052A830D9B005E4018 /* CategoryCell.swift in Sources */,
 				E9093CBA2A7B2CDA008583DD /* SwipteTableViewController.swift in Sources */,
 				EB2BE4FA239524DB00FB933B /* AppDelegate.swift in Sources */,
 				E9DA7EB22A78F5BF0099197E /* Category.swift in Sources */,

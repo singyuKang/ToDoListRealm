@@ -26,23 +26,47 @@ class ToDoListViewController: SwipteTableViewController  {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //navigation Bar Setting
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithTransparentBackground()
-        appearance.backgroundColor = UIColor.darkGray
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationItem.standardAppearance = appearance
-        navigationItem.scrollEdgeAppearance = appearance
-        navigationItem.hidesBackButton = true
-//        navigationItem.setHidesBackButton(true, animated: true)
-        
+ 
         //pop navigation gesture delegate
 //        navigationController?.interactivePopGestureRecognizer?.delegate = self
 //        loadItems()
         
         tableView.separatorStyle = .none
-
+        tableView.register(UINib(nibName: "ItemCell", bundle: nil), forCellReuseIdentifier: "ItemCell")
+     
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+ 
+        if let colourHex = selectedCategory?.backgroundColorHexValue {
+               
+            title = selectedCategory!.name
+            guard let navBar = navigationController?.navigationBar else {fatalError("Navigation Controller does not exist.")}
+         
+            //navigation Bar Setting
+            if let navBarColour = UIColor(hexString: colourHex){
+//                let appearance = UINavigationBarAppearance()
+//                navBar.backgroundColor = UIColor(hexString: colourHex)
+//                appearance.configureWithTransparentBackground()
+//                appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+//                navigationItem.standardAppearance = appearance
+//                navigationItem.scrollEdgeAppearance = appearance
+                
+                searchBar.tintColor = navBarColour
+                navBar.tintColor = ContrastColorOf(navBarColour, returnFlat: true)
+//                navBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: ContrastColorOf(navBarColour, returnFlat: true)]
+            }
+            
+        
+            
+            
+//            navigationItem.hidesBackButton = true
+//            navigationItem.setHidesBackButton(true, animated: true)
+            
+            
+        }
+    }
+    
     
     //MARK - Add New Items
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
@@ -63,7 +87,7 @@ class ToDoListViewController: SwipteTableViewController  {
                     print("Error Saving New Items, \(error)")
                 }
             }
-        
+            
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
@@ -85,22 +109,15 @@ class ToDoListViewController: SwipteTableViewController  {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
        // Fetch a cell of the appropriate type.
-        let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        
+//        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath) as! ItemCell
     
         if let item = todoItems?[indexPath.row] {
-            // Configure the cell’s contents.
+
+            cell.itemLabel?.text = item.title
+            cell.ItemCheckRight.isHidden = item.done ? false : true
             
-            if let colour = UIColor(hexString: selectedCategory!.backgroundColorHexValue)?.darken(byPercentage: CGFloat(indexPath.row) / CGFloat(todoItems!.count)){
-                cell.backgroundColor = colour
-                cell.textLabel?.textColor = ContrastColorOf(colour, returnFlat: true)
-            }
-            
-            cell.textLabel!.text = item.title
-      
-            cell.accessoryType = item.done ? .checkmark : .none
-//            cell.backgroundColor = FlatSkyBlue().darken(byPercentage:CGFloat(indexPath.row / todoItems?.count))
-            
+   
         }else{
             cell.textLabel?.text = "No Items Added"
         }
@@ -145,7 +162,7 @@ class ToDoListViewController: SwipteTableViewController  {
                     print("Error Delete Item, \(error)")
                 }
             }
-                
+
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
@@ -180,11 +197,6 @@ class ToDoListViewController: SwipteTableViewController  {
             }
         }
     }
-    
-    
-    
-  
-    
 }
 
 //MARK - SearchBarDelegate Methods
@@ -202,58 +214,9 @@ extension ToDoListViewController : UISearchBarDelegate {
             DispatchQueue.main.async {
                 searchBar.resignFirstResponder()
             }
-
         }
     }
 }
-
-//MARK - UIGestureRecognizerDelegate
-
-//extension ToDoListViewController : UIGestureRecognizerDelegate {
-//    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//          return true
-//      }
-//}
-
-
-////MARK - Swipe Cell Delegate Methods
-//extension CatagoryViewController : SwipeTableViewCellDelegate {
-//    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-//
-//
-//        guard orientation == .right else { return nil }
-//
-//        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
-//            // handle action by updating model with deletion
-//
-//            if let category = self.categories?[indexPath.row]{
-//                do{
-//                    try self.realm.write{
-//                        self.realm.delete(category)
-////                        tableView.deleteRows(at: [indexPath], with: .fade)
-//                    }
-//                }catch{
-//                    print("Error Delete Category, \(error)")
-//                }
-//            }
-//        }
-//
-//        // customize the action appearance
-//        deleteAction.image = UIImage(named: "delete")
-//
-//        return [deleteAction]
-//    }
-//
-//    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
-//        var options = SwipeOptions()
-//        options.expansionStyle = .destructive
-//        options.transitionStyle = .border
-//        return options
-//    }
-//
-//
-//}
-//
 
 
 
