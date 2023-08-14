@@ -10,31 +10,31 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ItemCell" rowHeight="82" id="KGk-i7-Jjw" customClass="ItemCell" customModule="Todoey" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="343" height="82"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ItemCell" rowHeight="104" id="KGk-i7-Jjw" customClass="ItemCell" customModule="Todoey" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="327" height="104"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="343" height="82"/>
+                <rect key="frame" x="0.0" y="0.0" width="327" height="104"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="RkP-II-BQs">
-                        <rect key="frame" x="12" y="0.0" width="319" height="82"/>
+                        <rect key="frame" x="12" y="0.0" width="303" height="104"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ItemCircle" translatesAutoresizingMaskIntoConstraints="NO" id="xxi-RP-OHJ">
-                                <rect key="frame" x="0.0" y="31" width="20" height="20"/>
+                                <rect key="frame" x="0.0" y="42" width="20" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="20" id="U91-SA-sd1"/>
                                     <constraint firstAttribute="height" constant="20" id="rol-7e-Qlg"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bZy-ll-iXm">
-                                <rect key="frame" x="25" y="31" width="269" height="20.5"/>
+                                <rect key="frame" x="25" y="42" width="253" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="check1" translatesAutoresizingMaskIntoConstraints="NO" id="6iA-Il-gd6">
-                                <rect key="frame" x="299" y="31" width="20" height="20"/>
+                                <rect key="frame" x="283" y="42" width="20" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="20" id="bud-ZH-yDY"/>
                                     <constraint firstAttribute="height" constant="20" id="foE-nI-3VY"/>
@@ -59,7 +59,7 @@
                 <outlet property="ItemCheckRight" destination="6iA-Il-gd6" id="SyV-0m-mET"/>
                 <outlet property="itemLabel" destination="bZy-ll-iXm" id="VO9-ju-q0d"/>
             </connections>
-            <point key="canvasLocation" x="61.594202898550726" y="44.866071428571423"/>
+            <point key="canvasLocation" x="50.000000000000007" y="52.232142857142854"/>
         </tableViewCell>
     </objects>
     <resources>

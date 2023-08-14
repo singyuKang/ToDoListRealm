@@ -18,15 +18,25 @@ class CatagoryViewController: SwipteTableViewController {
     
     var categories : Results<Category>?
     
+    deinit {
+//        NotificationCenter.default.removeObserver()
+        print("deinit CatagoryViewController")
+    }
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
        
         loadCategories()
         
-//        tableView.rowHeight = 80.0
         tableView.separatorStyle = .none
         tableView.rowHeight = 80
         tableView.register(UINib(nibName: "CategoryCell", bundle: nil), forCellReuseIdentifier: "CategoryCell")
+        // Drag & Drop 기능을 위한 부분
+        tableView.dragInteractionEnabled = true
+        tableView.dragDelegate = self
+        tableView.dropDelegate = self
         
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -34,10 +44,7 @@ class CatagoryViewController: SwipteTableViewController {
         navigationSetting()
         navBar.titleTextAttributes = [.foregroundColor : UIColor.white]
     }
- 
-    
-    
-    
+
     @IBAction func addButtonPress(_ sender: UIBarButtonItem) {
         var textField : UITextField = UITextField()
         let alert = UIAlertController(title: "Add New Todo Catagory", message: "", preferredStyle: .alert)
@@ -47,6 +54,7 @@ class CatagoryViewController: SwipteTableViewController {
             let newCatagory = Category()
             newCatagory.name = textField.text!
             newCatagory.backgroundColorHexValue = UIColor.randomFlat().hexValue()
+            newCatagory.CategoryIndex = self.categories?.count ?? 0
             
             self.save(category: newCatagory)
 
@@ -79,7 +87,7 @@ class CatagoryViewController: SwipteTableViewController {
     }
     
     func loadCategories() {
-        categories = realm.objects(Category.self)
+        categories = realm.objects(Category.self).sorted(byKeyPath: "CategoryIndex", ascending: true)
         tableView.reloadData()
     }
     
@@ -117,21 +125,23 @@ class CatagoryViewController: SwipteTableViewController {
 
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            if let category = categories?[indexPath.row]{
-                do{
-                    try realm.write{
-                        realm.delete(category)
-                        tableView.deleteRows(at: [indexPath], with: .fade)
+        UIApplication.shared.showAlert(title: "", message: "카테고리를 삭제하시겠습니까?", hideCancel: false, cancelTitle: "취소", confirmTitle: "확인", cancelHandler: nil, confirmHandler: {
+            if editingStyle == .delete {
+                if let category = self.categories?[indexPath.row]{
+                    do{
+                        try self.realm.write{
+                            self.realm.delete(category)
+                            tableView.deleteRows(at: [indexPath], with: .fade)
+                        }
+                    }catch{
+                        print("Error Delete category, \(error)")
                     }
-                }catch{
-                    print("Error Delete category, \(error)")
                 }
-            }
 
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }
+            } else if editingStyle == .insert {
+                // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+            }
+        })
     }
 
  
@@ -163,11 +173,22 @@ class CatagoryViewController: SwipteTableViewController {
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        do {
+            try realm.write{
+//                realm.add(category)
+                categories?[sourceIndexPath.row].CategoryIndex = destinationIndexPath.row
+                categories?[destinationIndexPath.row].CategoryIndex = sourceIndexPath.row
+            }
+        }catch{
+            print("Error Save categories?[sourceIndexPath.row]")
+        }
+    }
 
-    
     // MARK - TableView Delegate Methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "goToItems", sender: self)
+        NotificationCenter.default.post(name: CatagoryViewController.newCatagoryInsert, object: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -180,4 +201,32 @@ class CatagoryViewController: SwipteTableViewController {
     }
 
 }
+
+
+//MARK - UITableView UITableViewDragDelegate
+extension CatagoryViewController : UITableViewDragDelegate{
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        return [UIDragItem(itemProvider: NSItemProvider())]
+    }
+}
+
+// MARK:- UITableView UITableViewDropDelegate
+extension CatagoryViewController: UITableViewDropDelegate {
+    func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
+        if session.localDragSession != nil {
+            return UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+        }
+        return UITableViewDropProposal(operation: .cancel, intent: .unspecified)
+    }
+    func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) { }
+}
+
+extension CatagoryViewController {
+    static let newCatagoryInsert = Notification.Name(rawValue : "newCatagoryInsert")
+}
+ 
+
+
+
+
 

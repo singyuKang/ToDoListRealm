@@ -12,6 +12,7 @@ import RealmSwift
 class Category : Object {
     @objc dynamic var name : String = ""
     @objc dynamic var backgroundColorHexValue : String = ""
+    @objc dynamic var CategoryIndex : Int = 0
     
 //    let items : Array<Item> = []
     let items  =  List<Item>()

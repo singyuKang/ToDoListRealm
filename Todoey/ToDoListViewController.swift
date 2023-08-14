@@ -16,6 +16,8 @@ class ToDoListViewController: SwipteTableViewController  {
     var todoItems : Results<Item>?
     let realm = try! Realm()
     
+    var token: NSObjectProtocol?
+    
     var selectedCategory : Category? {
         //변경된 직후 호출
         didSet{
@@ -23,16 +25,35 @@ class ToDoListViewController: SwipteTableViewController  {
         }
     }
     
+    deinit {
+        if let token = token {
+            NotificationCenter.default.removeObserver(token)
+        }
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
- 
+        
+        // Drag & Drop 기능을 위한 부분
+//        tableView.dragInteractionEnabled = true
+//        tableView.dragDelegate = self
+//        tableView.dropDelegate = self
+        
         //pop navigation gesture delegate
 //        navigationController?.interactivePopGestureRecognizer?.delegate = self
 //        loadItems()
         
         tableView.separatorStyle = .none
         tableView.register(UINib(nibName: "ItemCell", bundle: nil), forCellReuseIdentifier: "ItemCell")
+        
+        token = NotificationCenter.default.addObserver(forName: CatagoryViewController.newCatagoryInsert, object: nil, queue: OperationQueue.main) { [weak self] (noti) in
+            print("Add Observer Called")
+        }
+        
+        
+        
      
     }
     
@@ -56,13 +77,6 @@ class ToDoListViewController: SwipteTableViewController  {
                 navBar.tintColor = ContrastColorOf(navBarColour, returnFlat: true)
 //                navBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: ContrastColorOf(navBarColour, returnFlat: true)]
             }
-            
-        
-            
-            
-//            navigationItem.hidesBackButton = true
-//            navigationItem.setHidesBackButton(true, animated: true)
-            
             
         }
     }
@@ -168,6 +182,7 @@ class ToDoListViewController: SwipteTableViewController  {
         }
     }
 
+
     
     func saveItems(item : Item) {
         do {
@@ -181,6 +196,7 @@ class ToDoListViewController: SwipteTableViewController  {
     }
     
     func loadItems() {
+//        todoItems = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
         todoItems = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
 //        print("todoItems:::::::::::", todoItems)
         tableView.reloadData()
@@ -217,6 +233,26 @@ extension ToDoListViewController : UISearchBarDelegate {
         }
     }
 }
+
+
+////MARK - UITableView UITableViewDragDelegate
+//extension ToDoListViewController : UITableViewDragDelegate{
+//    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+//        return [UIDragItem(itemProvider: NSItemProvider())]
+//    }
+//}
+//
+//// MARK:- UITableView UITableViewDropDelegate
+//extension ToDoListViewController: UITableViewDropDelegate {
+//    func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
+//        if session.localDragSession != nil {
+//            return UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+//        }
+//        return UITableViewDropProposal(operation: .cancel, intent: .unspecified)
+//    }
+//    func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) { }
+//}
+//
 
 
 
