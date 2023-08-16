@@ -83,12 +83,12 @@ class CatagoryViewController: SwipteTableViewController {
         }catch{
             print("Error Save Category")
         }
-  
     }
     
     func loadCategories() {
         categories = realm.objects(Category.self).sorted(byKeyPath: "CategoryIndex", ascending: true)
         tableView.reloadData()
+        print("categories::::::::::::\(categories)")
     }
     
     //MARK - Delete Data from Swipe
@@ -174,12 +174,18 @@ class CatagoryViewController: SwipteTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        
         do {
             try realm.write{
 //                realm.add(category)
-                categories?[sourceIndexPath.row].CategoryIndex = destinationIndexPath.row
-                categories?[destinationIndexPath.row].CategoryIndex = sourceIndexPath.row
+                if let updateClicked = realm.objects(Category.self).filter(NSPredicate(format: "CategoryIndex = \(sourceIndexPath.row)", "")).first, let updateDestination = realm.objects(Category.self).filter(NSPredicate(format: "CategoryIndex = \(destinationIndexPath.row)", "")).first{
+                    updateClicked.CategoryIndex = destinationIndexPath.row
+                    updateDestination.CategoryIndex = sourceIndexPath.row
+                }
+                loadCategories()
             }
+
+           
         }catch{
             print("Error Save categories?[sourceIndexPath.row]")
         }
