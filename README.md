@@ -1,6 +1,15 @@
 # TodoEy
 > 사용자가 자신의 할 일을 정리하고 , 완료한 작업을 체크하여 쉽게 확인할 수 있는 간편한 앱입니다.
 
+<img src="https://github.com/user-attachments/assets/5e86c625-a933-4457-bb5c-26e5f1a33304"  width="200" height="400"/>
+<img src="https://github.com/user-attachments/assets/1bfb984d-6d4a-4e3f-9f99-3267df26f776"  width="200" height="400"/>
+<img src="https://github.com/user-attachments/assets/0b5068ae-6037-4750-920f-df55a91b787e"  width="200" height="400"/>
+<img src="https://github.com/user-attachments/assets/56823a70-6851-4a74-9774-00e32c1af9ba"  width="200" height="400"/>
+<img src="https://github.com/user-attachments/assets/ff66601e-f589-40bb-8b91-d168e19cebe0"  width="200" height="400"/>
+<img src="https://github.com/user-attachments/assets/9a93da14-0393-4863-8dbe-e68d691b008c"  width="200" height="400"/>
+<img src="https://github.com/user-attachments/assets/b0eb3ee5-cd13-4d25-9adc-12be6989a32b"  width="200" height="400"/>
+
+
 <br>
 
 ## 🛠️ iOS 기술 스택
